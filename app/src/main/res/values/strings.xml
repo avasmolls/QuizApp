@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">QuizApp</string>
+    <string name="false_view">False</string>
+    <string name="true_view">True</string>
+    <string name="next_view">Next</string>
+    <string name="question1">Ava has many favorite colors. However, her all time favorite color is green. True or False?</string>
+    <string name="question2">Cheer basically takes over all of Ava\'s free time. She still loves it however that is why she has been doing it for 10 years. Ava has been cheering for 8 years, True or False?</string>
+    <string name="question3">Birthday\'s are the most important time of the year! Not only does Ava love celebrating her birthday with friends, she loves buying gifts for other people\'s birthdays. Ava loves buying gifts, True or False?</string>
+    <string name="question4">Ava has known what she wants to do since she was in 9th grade. When she is in college she wants to major in Computer Science, True or False?</string>
+    <string name="question5">Family is a huge part of Ava\'s life, she spends as much time with them as she can. Ava has 2 siblings, True or False?</string>
+    <string name="toast_right">Correct!</string>
+    <string name="toast_wrong">Incorrect!</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
