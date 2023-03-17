@@ -1,36 +1,27 @@
 package com.example.quizapp
 
+import android.media.MediaPlayer
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.findNavController
+import androidx.navigation.ui.NavigationUI
 import com.example.quizapp.databinding.FragmentMainBinding
+import kotlinx.coroutines.NonCancellable.start
+import androidx.fragment.app.viewModels
 
 class MainFragment : Fragment() {
-    // DATA CLASS -> used to store questions
-
-    data class Question(val resource: Int, val answer: Boolean) {
-    }
 
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
 
-    // PROPERTIES
+    lateinit var music: MediaPlayer
 
-    var currentQuestionNumber = 0
-    var questionsCorrect = 0
-    var questionsWrong = 0
-    val questions: List<Question> = listOf(
-        Question(R.string.question1, true),
-        Question(R.string.question2, false),
-        Question(R.string.question3, true),
-        Question(R.string.question4, true),
-        Question(R.string.question5, false)
-    )
-
+    private val viewModel: QuizViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,7 +29,6 @@ class MainFragment : Fragment() {
     ): View? {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         val rootView = binding.root
-
 
         // SAVE INSTANCE STATE
 
@@ -48,20 +38,36 @@ class MainFragment : Fragment() {
 
         nextQuestion()
 
+        viewModel.currentQuestionNumber.observe(viewLifecycleOwner) {
+            binding.questionView.text = viewModel.currentQuestionText
+        }
+
         binding.cheatButton.setOnClickListener {
             val action = MainFragmentDirections.actionMainFragmentToCheatFragment(questions[currentQuestionNumber].answer)
             rootView.findNavController().navigate(action)
         }
 
+        setFragmentResultListener("REQUESTING_CHEAT_KEY") { requestKey, bundle: Bundle ->
+            questions[currentQuestionNumber].cheated = bundle.getBoolean("CHEAT_KEY")
+        }
+
         // when true button is clicked
         binding.trueButton.setOnClickListener() {
             checkAnswer(true)
+            if(questionsCorrect == 3) {
+                val action = MainFragmentDirections.actionMainFragmentToGameWonFragment(questionsWrong)
+                rootView.findNavController().navigate(action)
+            }
         }
 
 
         // when false button is clicked
         binding.falseButton.setOnClickListener() {
             checkAnswer(false)
+            if(questionsCorrect == 3) {
+                val action = MainFragmentDirections.actionMainFragmentToGameWonFragment(questionsWrong)
+                rootView.findNavController().navigate(action)
+            }
         }
 
         // when next button is clicked
@@ -102,7 +108,19 @@ class MainFragment : Fragment() {
                 nextQuestion()
             }
         }
+        setHasOptionsMenu(true)
         return rootView
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.options_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return NavigationUI.
+                onNavDestinationSelected(item, requireView().findNavController())
+                || super.onOptionsItemSelected(item)
     }
 
     override fun onDestroyView() {
@@ -114,16 +132,24 @@ class MainFragment : Fragment() {
 
     // checkAnswer() -> called when user answers
     fun checkAnswer(usersAnswer: Boolean) {
-        /* TODO: Uses the Question data class to determine if the user's answer is correct
-        TODO: Displays a toast letting the user know if their answer was correct or incorrect every time they answer */
         val current = questions[this.currentQuestionNumber]
         val correctAnswer = current.answer
         if (correctAnswer == usersAnswer) {
-            Toast.makeText(activity, R.string.toast_right, Toast.LENGTH_SHORT).show()
-            questionsCorrect++
+            music = MediaPlayer.create(context, R.raw.right)
+            music.start()
+            if(questions[currentQuestionNumber].cheated) {
+                Toast.makeText(activity, R.string.toast_cheat, Toast.LENGTH_SHORT).show()
+            }
+            else {
+                questionsCorrect+=1
+                Toast.makeText(activity, R.string.toast_right, Toast.LENGTH_SHORT).show()
+
+            }
         } else {
+            music = MediaPlayer.create(context, R.raw.wrong)
+            music.start()
+            questionsWrong+=1
             Toast.makeText(activity, R.string.toast_wrong, Toast.LENGTH_SHORT).show()
-            questionsWrong++
         }
     }
 

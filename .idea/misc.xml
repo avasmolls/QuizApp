@@ -5,10 +5,13 @@
       <map>
         <entry key="..\:/Users/smolleya24/AndroidStudioProjects/QuizApp/app/src/main/res/layout-land/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/smolleya24/AndroidStudioProjects/QuizApp/app/src/main/res/layout/activity_main.xml" value="0.27291666666666664" />
+        <entry key="..\:/Users/smolleya24/AndroidStudioProjects/QuizApp_Fragments/app/src/main/res/drawable/ic_play.xml" value="0.157" />
         <entry key="..\:/Users/smolleya24/AndroidStudioProjects/QuizApp_Fragments/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/smolleya24/AndroidStudioProjects/QuizApp_Fragments/app/src/main/res/layout/fragment_about.xml" value="0.27291666666666664" />
         <entry key="..\:/Users/smolleya24/AndroidStudioProjects/QuizApp_Fragments/app/src/main/res/layout/fragment_cheat.xml" value="0.27291666666666664" />
         <entry key="..\:/Users/smolleya24/AndroidStudioProjects/QuizApp_Fragments/app/src/main/res/layout/fragment_game_won.xml" value="0.25" />
         <entry key="..\:/Users/smolleya24/AndroidStudioProjects/QuizApp_Fragments/app/src/main/res/layout/fragment_main.xml" value="0.25" />
+        <entry key="..\:/Users/smolleya24/AndroidStudioProjects/QuizApp_Fragments/app/src/main/res/menu/options_menu.xml" value="0.27291666666666664" />
       </map>
     </option>
   </component>

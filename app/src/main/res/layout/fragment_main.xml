@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/audiowide"
-        android:text="The Ava Quiz"
+        android:text="@string/the_ava_quiz"
         android:textColor="#0E230F"
         android:textSize="48sp"
         android:textStyle="bold|italic"

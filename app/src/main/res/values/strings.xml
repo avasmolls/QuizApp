@@ -10,6 +10,15 @@
     <string name="question5">Family is a huge part of Ava\'s life, she spends as much time with them as she can. Ava has 2 siblings, True or False?</string>
     <string name="toast_right">Correct!</string>
     <string name="toast_wrong">Incorrect!</string>
+    <string name="toast_cheat">I mean, I guess you got it...cheater.</string>
+    <string name="are_you_sure_you_would_like_to_cheat_and_have_the_answered_revealed_to_you">Are you sure you would like to cheat and have the answered revealed to you?</string>
+    <string name="show_answer">Show Answer</string>
+    <string name="you_won">You Won!</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="my_name_is_ava">my name is ava.</string>
+    <string name="the_ava_quiz">The Ava Quiz</string>
+    <string name="about">About</string>
+    <string name="desc1">This is a Quiz about me. Because I am awesome. Also, when we first made this quiz app I had no idea what to make a quiz about. So I made it about myself. Because I panicked. This is what my panic creates.</string>
+    <string name="desc2">Answer some questions about me. Because I am cool like that.</string>
 </resources>
