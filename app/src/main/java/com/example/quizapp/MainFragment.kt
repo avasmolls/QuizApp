@@ -5,14 +5,10 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.example.quizapp.databinding.FragmentMainBinding
-import kotlinx.coroutines.NonCancellable.start
-import androidx.fragment.app.viewModels
 
 class MainFragment : Fragment() {
 
@@ -30,62 +26,41 @@ class MainFragment : Fragment() {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         val rootView = binding.root
 
-        // SAVE INSTANCE STATE
-
-        if (savedInstanceState != null) {
-            currentQuestionNumber = savedInstanceState.getInt(KEY_QUESTION_NUM)
+        viewModel.currentQuestionNumber.observe(viewLifecycleOwner) {
+            binding.questionView.text = getString(viewModel.currentQuestionText)
         }
 
-        nextQuestion()
-
-        viewModel.currentQuestionNumber.observe(viewLifecycleOwner) {
-            binding.questionView.text = viewModel.currentQuestionText
+        viewModel.gameWon.observe(viewLifecycleOwner) {
+            if(viewModel.checkIfGameWon()) {
+                val action = MainFragmentDirections.actionMainFragmentToGameWonFragment()
+                rootView.findNavController().navigate(action)
+            }
         }
 
         binding.cheatButton.setOnClickListener {
-            val action = MainFragmentDirections.actionMainFragmentToCheatFragment(questions[currentQuestionNumber].answer)
+            val action = MainFragmentDirections.actionMainFragmentToCheatFragment()
             rootView.findNavController().navigate(action)
-        }
-
-        setFragmentResultListener("REQUESTING_CHEAT_KEY") { requestKey, bundle: Bundle ->
-            questions[currentQuestionNumber].cheated = bundle.getBoolean("CHEAT_KEY")
         }
 
         // when true button is clicked
         binding.trueButton.setOnClickListener() {
             checkAnswer(true)
-            if(questionsCorrect == 3) {
-                val action = MainFragmentDirections.actionMainFragmentToGameWonFragment(questionsWrong)
-                rootView.findNavController().navigate(action)
-            }
         }
-
 
         // when false button is clicked
         binding.falseButton.setOnClickListener() {
             checkAnswer(false)
-            if(questionsCorrect == 3) {
-                val action = MainFragmentDirections.actionMainFragmentToGameWonFragment(questionsWrong)
-                rootView.findNavController().navigate(action)
-            }
         }
 
-        // when next button is clicked
         binding.nextQuestion.setOnClickListener() {
-            if (currentQuestionNumber + 1 > questions.size - 1) {
-                currentQuestionNumber = 0
-                nextQuestion()
-            } else {
-                currentQuestionNumber++
-                nextQuestion()
-            }
+            viewModel.nextQuestion()
         }
 
 
         // TODO: EXTRA CREDIT!!
 
         // when question is clicked, acts as next button
-        binding.questionView.setOnClickListener()
+       /* binding.questionView.setOnClickListener()
         {
             if (currentQuestionNumber + 1 > questions.size - 1) {
                 currentQuestionNumber = 0
@@ -94,11 +69,11 @@ class MainFragment : Fragment() {
                 currentQuestionNumber++
                 nextQuestion()
             }
-        }
+        } */
 
 
         // when last button is clicked
-        binding.backButton.setOnClickListener()
+        /*binding.backButton.setOnClickListener()
         {
             if (currentQuestionNumber - 1 < 0) {
                 currentQuestionNumber = questions.size - 1
@@ -107,7 +82,7 @@ class MainFragment : Fragment() {
                 currentQuestionNumber--
                 nextQuestion()
             }
-        }
+        } */
         setHasOptionsMenu(true)
         return rootView
     }
@@ -132,37 +107,23 @@ class MainFragment : Fragment() {
 
     // checkAnswer() -> called when user answers
     fun checkAnswer(usersAnswer: Boolean) {
-        val current = questions[this.currentQuestionNumber]
-        val correctAnswer = current.answer
-        if (correctAnswer == usersAnswer) {
+        if (viewModel.checkAnswer(usersAnswer)) {
             music = MediaPlayer.create(context, R.raw.right)
             music.start()
-            if(questions[currentQuestionNumber].cheated) {
+            if(viewModel.currentQuestionCheatStatus) {
                 Toast.makeText(activity, R.string.toast_cheat, Toast.LENGTH_SHORT).show()
             }
             else {
-                questionsCorrect+=1
                 Toast.makeText(activity, R.string.toast_right, Toast.LENGTH_SHORT).show()
 
             }
         } else {
             music = MediaPlayer.create(context, R.raw.wrong)
             music.start()
-            questionsWrong+=1
             Toast.makeText(activity, R.string.toast_wrong, Toast.LENGTH_SHORT).show()
         }
     }
 
-    // nextQuestion() -> called to go onto next question
-    fun nextQuestion() {
-        val next = questions[this.currentQuestionNumber]
-        binding.questionView.text = getString(next.resource)
-    }
-
-    override fun onSaveInstanceState(savedInstanceState: Bundle) {
-        super.onSaveInstanceState(savedInstanceState)
-        savedInstanceState.putInt(KEY_QUESTION_NUM, currentQuestionNumber)
-    }
 
 
 }

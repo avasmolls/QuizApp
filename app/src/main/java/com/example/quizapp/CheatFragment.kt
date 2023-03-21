@@ -3,12 +3,9 @@ package com.example.quizapp
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.core.os.bundleOf
-import androidx.fragment.app.setFragmentResult
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.example.quizapp.databinding.FragmentCheatBinding
-import androidx.fragment.app.viewModels
 import androidx.fragment.app.activityViewModels
 
 class CheatFragment : Fragment() {
@@ -25,12 +22,10 @@ class CheatFragment : Fragment() {
         _binding = FragmentCheatBinding.inflate(inflater, container, false)
         val rootView = binding.root
 
-        val args = CheatFragmentArgs.fromBundle(requireArguments())
-
         binding.cheatScreenButton.setOnClickListener {
-            binding.answer.text = args.answerArg.toString()
-            val cheat = true
-            setFragmentResult("REQUESTING_CHEAT_KEY", bundleOf("CHEAT_KEY" to cheat))
+            val ans = viewModel.currentQuestionAnswer
+            binding.answer.text = ans.toString()
+            viewModel.setCheatedStatusForCurrentQuestion(true)
         }
         setHasOptionsMenu(true)
         return rootView

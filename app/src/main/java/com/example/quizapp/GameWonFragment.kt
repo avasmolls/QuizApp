@@ -7,10 +7,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
-import com.example.quizapp.databinding.FragmentCheatBinding
 import com.example.quizapp.databinding.FragmentGameWonBinding
-import kotlinx.coroutines.NonCancellable.start
-import androidx.fragment.app.viewModels
 import androidx.fragment.app.activityViewModels
 
 class GameWonFragment : Fragment() {
@@ -28,8 +25,7 @@ class GameWonFragment : Fragment() {
     ): View? {
         _binding = FragmentGameWonBinding.inflate(inflater, container, false)
         val rootView = binding.root
-        val args = GameWonFragmentArgs.fromBundle(requireArguments())
-        binding.howManyIncorrect.text = "You had " + args.wrongArg + " wrong answers!"
+        binding.howManyIncorrect.text = "You had " + viewModel.questionsWrong + " wrong answers!"
         setHasOptionsMenu(true)
         music = MediaPlayer.create(context, R.raw.win)
         music.isLooping = true
