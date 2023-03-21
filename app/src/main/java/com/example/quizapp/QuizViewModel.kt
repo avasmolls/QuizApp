@@ -5,15 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class QuizViewModel : ViewModel() {
-    private val _questions: List<Question> = listOf(
+    private val questions: List<Question> = listOf(
         Question(R.string.question1, true, false),
         Question(R.string.question2, false, false),
         Question(R.string.question3, true, false),
         Question(R.string.question4, true, false),
         Question(R.string.question5, false, false)
     )
-    val questions: List<Question>
-        get() = _questions
 
     private val _gameWon = MutableLiveData(false)
     val gameWon: LiveData<Boolean>
@@ -44,12 +42,8 @@ class QuizViewModel : ViewModel() {
         questions[currentQuestionNumber.value ?: 0].cheated = cheater
     }
 
-    fun checkIfGameWon(): Boolean {
-        return if (questionsCorrect.toString().toInt() == 3) {
-            _gameWon.value = true
-            return gameWon.toString().toBoolean()
-        } else
-            return gameWon.toString().toBoolean()
+    fun checkIfGameWon() {
+        _gameWon.value = (questionsCorrect == 3)
     }
 
     fun nextQuestion() {
@@ -64,11 +58,12 @@ class QuizViewModel : ViewModel() {
     fun checkAnswer(usersAnswer: Boolean): Boolean {
         if (currentQuestionAnswer == usersAnswer) {
             if (currentQuestionCheatStatus == false) {
-                _questionsCorrect += 1
+                _questionsCorrect++
+                checkIfGameWon()
             }
             return true
         } else {
-            _questionsWrong += 1
+            _questionsWrong++
             return false
         }
     }

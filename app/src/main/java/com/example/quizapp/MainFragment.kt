@@ -30,10 +30,10 @@ class MainFragment : Fragment() {
             binding.questionView.text = getString(viewModel.currentQuestionText)
         }
 
-        viewModel.gameWon.observe(viewLifecycleOwner) {
-            if(viewModel.checkIfGameWon()) {
-                val action = MainFragmentDirections.actionMainFragmentToGameWonFragment()
-                rootView.findNavController().navigate(action)
+        viewModel.gameWon.observe(viewLifecycleOwner) { gameWonStatus ->
+            if(gameWonStatus) {
+//                val action = MainFragmentDirections.actionMainFragmentToGameWonFragment()
+//                rootView.findNavController().navigate(action)
             }
         }
 
